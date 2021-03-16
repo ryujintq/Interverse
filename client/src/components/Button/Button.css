@@ -1,0 +1,20 @@
+.btn {
+    height: 50px;
+    width: 200px;
+    border: none;
+    color: white;
+    background-color: var(--primary);
+    border-radius: 999px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.6 ease-in-out;
+}
+
+.btn:active {
+    transform: scale(.95);
+    box-shadow: 0 3px 15px -2px var(--primary);
+}
+
+.btn:focus {
+    outline: none;
+}

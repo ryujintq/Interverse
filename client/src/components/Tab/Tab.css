@@ -1,0 +1,15 @@
+.tab-list-item {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: -1px;
+  padding: 10px 0;
+  width: 50%;
+  text-align: center;
+  cursor: pointer;
+  border: solid lightgray;
+  border-width: 0 0 1px 1px;
+}
+
+.tab-list-active {
+  border-bottom: 2px solid var(--primary);
+}

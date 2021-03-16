@@ -1,0 +1,135 @@
+.left-panel {
+    width: 350px;
+    height: calc(100% - 60px);
+    border-right: 1px solid lightgray;
+    display: flex;
+    flex-direction: column;
+}
+
+.left-panel-username {
+    border: 1px solid lightgray;
+    border-width: 1px 0;
+    padding-left: 10px;
+}
+
+.left-panel-button {
+    background-color: var(--primary);
+    text-align: center;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.conversation-name{
+    cursor: pointer;
+    margin: 0;
+    padding: 10px;
+}
+
+.conversation-name:hover{
+    background-color: rgb(245, 245, 245);
+}
+
+.conversation-name:hover.selected-chat {
+    background-color: var(--primary);
+    color: white;
+}
+
+.selected-chat {
+    background-color: var(--primary);
+    color: white;
+}
+
+.modal-btns {
+    margin-top: 20px;
+}
+
+.modal-btn {
+    background-color: var(--primary);
+    width: 100%;
+    text-align: center;
+    color: white;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.modal-list-container{
+    height: 200px;
+    width: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-list-element {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 15px;
+    cursor: pointer;
+}
+.modal-list-element p {
+    padding: 0;
+    margin: 0;
+    margin-left: 5px;
+    user-select: none;
+}
+
+.modal-list-element input {
+    padding: 0;
+    margin: 0;
+}
+
+.contact-section{
+    margin-bottom: 20px;
+}
+
+.contact-section-heading {
+    padding-left: 10px;
+    border-bottom: 1px solid lightgray;
+}
+
+.contact-element {
+    padding: 0;
+    margin: 10px 0;
+    padding-left: 10px;
+    color: var(--primary);
+}
+
+.contact-element-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.contact-icon {
+    color: var(--primary);
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.friend-element {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.remove-icon {
+    display: none;
+}
+
+.friend-element:hover > .remove-icon{
+    display: block;
+}
+
+.new-messsage {
+    font-size: 12px;
+    background-color: var(--primary);
+    color: white;
+    padding: 0 2px;
+}

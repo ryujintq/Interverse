@@ -1,0 +1,24 @@
+:root {
+    --primary: #ff3953;
+    --black: black;
+    --white: white;
+    --grey: #eeeeee;
+}
+
+* {
+    box-sizing:border-box; 
+    -moz-box-sizing:border-box; 
+    -webkit-box-sizing:border-box; 
+    -ms-box-sizing:border-box;
+}
+
+.app {
+    height: 100vh;
+    overflow: hidden;
+    width: 100%;
+}
+
+.white-text {
+    color: var(--white);
+    text-align: center;
+}

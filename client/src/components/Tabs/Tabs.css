@@ -1,0 +1,9 @@
+.tabs {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.tab-list { 
+    padding: 0;
+    margin: 0;
+}

@@ -1,0 +1,6 @@
+.right-panel-chat {
+    width: 100%;
+    flex: 1;
+    height: calc(100vh - 120px);
+    overflow-y: auto;
+}

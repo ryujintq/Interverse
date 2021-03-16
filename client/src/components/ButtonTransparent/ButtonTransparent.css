@@ -1,0 +1,20 @@
+.btn--transparent {
+    height: 50px;
+    width: 200px;
+    border: 1px solid white;
+    color: white;
+    background-color: transparent;
+    border-radius: 999px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.6 ease-in-out;
+}
+
+.btn--transparent:active {
+    transform: scale(.95);
+    box-shadow: 0 3px 15px -2px white;
+}
+
+.btn--transparent:focus {
+    outline: none;
+}

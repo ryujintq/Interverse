@@ -1,0 +1,7 @@
+.right-panel {
+    flex-grow: 1;
+    height: calc(100% - 60px);
+    display: flex;
+    flex-direction: column;
+}
+
