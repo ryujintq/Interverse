@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { login, signup, setErrorMessage, clearErrorMessage } from '../../redux/actions/authActions'
 import ErrorMessage from '../../components/ErrorMessage/ErrorMessage'
 import './Authentication.css'
+import isEmail from '../../util/isEmail'
 
 const Authentication = () => {
     const [isSliderLeft, setIsSliderLeft] = useState(true) //controls position of slider
@@ -14,7 +15,7 @@ const Authentication = () => {
     const [signupData, setSignupData] = useState({ email: '', username: '', language: '', password: '', password2: '' })
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
-    const { errorMessage } = auth
+    const { signedUp, errorMessage } = auth
 
     //onChange for all login data
     const handleLoginData = (event) => {
@@ -60,6 +61,10 @@ const Authentication = () => {
     //dispatchs signup api call and state change
     const handleSignup = e => {
         e.preventDefault()
+        if (!isEmail(signupData.email)) {
+            dispatch(setErrorMessage('Please enter a valid email'))
+            return
+        }
         if (signupData.password === signupData.password2) {
             dispatch(signup(signupData.username, signupData.email, signupData.password, signupData.language))
         } else {
@@ -71,18 +76,24 @@ const Authentication = () => {
         <div className='authentication'>
             <div className='authentication-container'>
                 <div className={`form-container signup-form-container ${isSliderLeft && 'signup-right'}`}>
-                    <form className='form signup-form'>
-                        <h1>Signup</h1>
-                        <div>
-                            {errorMessage && <ErrorMessage text={errorMessage} />}
-                            <Input type='text' name='username' value={signupData.username} onChange={handleSignupData} placeholder='Username' />
-                            <Input type='text' name='email' value={signupData.email} onChange={handleSignupData} placeholder='Email' />
-                            <Dropdown name='langauge' value={signupData.language} onChange={() => { }} onSelect={handleLanguageSelect} placeholder='Language' />
-                            <Input type='password' name='password' value={signupData.password} onChange={handleSignupData} placeholder='Password' />
-                            <Input type='password' name='password2' value={signupData.password2} onChange={handleSignupData} placeholder='Confirm Password' />
+                    {signedUp
+                        ? <div className="notification-container">
+                            <h3 className='signed-up-msg'>An email has been sent to the one provided. <br /> Please click the link within to verify</h3>
                         </div>
-                        <Button text='Confirm' onClick={e => handleSignup(e)} />
-                    </form>
+                        : (
+                            <form className='form signup-form'>
+                                <h1>Signup</h1>
+                                <div>
+                                    {errorMessage && <ErrorMessage text={errorMessage} />}
+                                    <Input type='text' name='username' value={signupData.username} onChange={handleSignupData} placeholder='Username' />
+                                    <Input type='text' name='email' value={signupData.email} onChange={handleSignupData} placeholder='Email' />
+                                    <Dropdown name='langauge' value={signupData.language} onChange={() => { }} onSelect={handleLanguageSelect} placeholder='Language' />
+                                    <Input type='password' name='password' value={signupData.password} onChange={handleSignupData} placeholder='Password' />
+                                    <Input type='password' name='password2' value={signupData.password2} onChange={handleSignupData} placeholder='Confirm Password' />
+                                </div>
+                                <Button text='Confirm' onClick={e => handleSignup(e)} />
+                            </form>
+                        )}
                 </div>
                 <div className={`form-container login-form-container ${!isSliderLeft && 'login-left'}`}>
                     <form className='form login-form'>

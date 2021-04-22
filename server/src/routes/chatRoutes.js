@@ -12,8 +12,8 @@ const router = express.Router()
 //@access   Private
 router.get('/:id', requireAuth, async (req, res) => {
     try {
-        const messages = await Message.find({ chat: req.params.id }, 'sender messages timestamp').sort({ timestamp: 1 }).limit(30).lean()
-        const chat = await Chat.findById(req.params.id, 'usersInfo.user usersInfo.name name noOfUnreads').lean().populate('usersInfo.user', 'username').lean()
+        const messages = await Message.find({ chat: req.params.id }, 'sender messages timestamp originalMessage').sort({ timestamp: 1 }).limit(30).lean()
+        const chat = await Chat.findById(req.params.id, 'usersInfo.user usersInfo.name name').lean().populate('usersInfo.user', 'username').lean()
         const user = await User.findByIdAndUpdate(req.id, { $set: { lastChatOpened: chat._id } })
 
         for (let i = 0, iEnd = messages.length; i < iEnd; i++) {
@@ -76,13 +76,10 @@ router.post('/', requireAuth, async (req, res) => {
                 }
             }
 
-            const isMultiLanguage = languages > 1
-
             const chat = new Chat({
                 usersInfo: users,
                 name: incomingName,
                 languages,
-                isMultiLanguage,
                 lastUpdated: new Date(),
             })
 

@@ -21,7 +21,6 @@ const Main = () => {
             dispatch(setFriendsAndRequests(friendsData))
             dispatch(setChats(chatData))
         })
-
     }, [socket])
 
     return (

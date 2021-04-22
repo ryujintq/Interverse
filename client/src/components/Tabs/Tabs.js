@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { useMediaQuery } from '../../util/useMediaQuery'
 import Tab from '../Tab/Tab'
 import './Tabs.css'
 
-const Tabs = ({ children, onTabChange }) => {
+const Tabs = ({ children, onTabChange, onCloseTabs }) => {
     const [activeTab, setActiveTab] = useState(children[0].props.label)
+
+    const isScreenSmall = useMediaQuery()
 
     useEffect(() => {
         onTabChange()
@@ -29,6 +32,7 @@ const Tabs = ({ children, onTabChange }) => {
                         )
                     })
                 }
+                {isScreenSmall && <li className='tab-list-item close-icon' onClick={onCloseTabs}>X</li>}
             </ol>
             <div className="tab-content">
                 {children.map(child => {

@@ -1,9 +1,11 @@
 .left-panel {
     width: 350px;
-    height: calc(100% - 60px);
+    height: calc(100vh - 60px);
     border-right: 1px solid lightgray;
     display: flex;
     flex-direction: column;
+    transition: all 0.5s ease-in-out;
+    background-color: white;
 }
 
 .left-panel-username {
@@ -128,8 +130,33 @@
 }
 
 .new-messsage {
-    font-size: 12px;
+    display: inline-block;
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
     background-color: var(--primary);
     color: white;
     padding: 0 2px;
+    border-radius: 500px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.group-input-disabled {
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) { 
+    .left-panel {   
+        position: absolute;
+        width: 280px;
+        transform: translateX(0);
+        z-index: 500;
+        height: calc(100vh - 60px);
+    }
+    .left-panel.toggle {
+        transform: translateX(-100%);
+    }
 }

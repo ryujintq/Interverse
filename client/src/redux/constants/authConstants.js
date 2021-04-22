@@ -1,5 +1,6 @@
 export const AUTH_REQUEST = 'AUTH_REQUEST'
-export const AUTH_SUCCESS = 'AUTH_SUCCESS'
+export const AUTH_LOGIN = 'AUTH_LOGIN'
+export const AUTH_SIGNUP = 'AUTH_SIGNUP'
 export const AUTH_FAIL = 'AUTH_FAIL'
 export const AUTH_CLEAR_ERROR = 'AUTH_CLEAR_ERROR'
 export const AUTH_SIGNOUT = 'AUTH_SIGNOUT'

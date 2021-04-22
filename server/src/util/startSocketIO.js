@@ -61,12 +61,14 @@ const startSocketIO = io => {
 
                 const timestamp = new Date()
 
+                const compareResult = translatedMessages.localeCompare(messages);
+
                 //create the message and save to database
                 let newMessage = new Message({
                     chat,
                     sender,
                     messages: translatedMessages,
-                    originalMessage: messages,
+                    originalMessage: compareResult !== 0 ? messages : '',
                     timestamp
                 })
 
@@ -130,8 +132,8 @@ const startSocketIO = io => {
                         languages.push(userToAdd.language)
                     }
                 }
-                const isMultiLanguage = chat.languages > 1
-                chat = await Chat.findByIdAndUpdate(chatId, { languages, isMultiLanguage }, { new: true }).lean()
+
+                chat = await Chat.findByIdAndUpdate(chatId, { languages }, { new: true }).lean()
 
                 const translatedMessages = await translate(chat.languages, `${user.username} has left the chat`, user.language)
 
@@ -209,8 +211,7 @@ const startSocketIO = io => {
                     }
                 }
 
-                const isMultiLanguage = chat.languages > 1
-                chat = await Chat.findByIdAndUpdate(chatId, { isMultiLanguage, $push: { languages: { $each: [...languages] } } }, { new: true }).lean()
+                chat = await Chat.findByIdAndUpdate(chatId, { $push: { languages: { $each: [...languages] } } }, { new: true }).lean()
 
                 const translatedMessages = await translate(chat.languages, `${message} ${users.length > 1 ? 'have' : 'has'} been added to the chat`, user.language)
 

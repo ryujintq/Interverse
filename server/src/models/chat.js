@@ -17,8 +17,7 @@ const chatSchema = new mongoose.Schema({
     ],
     name: String,
     languages: [String],
-    lastUpdated: Date,
-    isMultiLanguage: Boolean
+    lastUpdated: Date
 })
 
 export default mongoose.model('Chat', chatSchema)

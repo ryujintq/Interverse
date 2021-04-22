@@ -1,7 +1,7 @@
 import React from 'react'
 import './Input.css'
 
-const Input = ({ type, value, name, onChange, placeholder, readOnly }) => {
+const Input = ({ type, value, name, onChange, placeholder, readOnly, disabled }) => {
     return (
         <input
             className='input'
@@ -11,6 +11,7 @@ const Input = ({ type, value, name, onChange, placeholder, readOnly }) => {
             onChange={onChange}
             placeholder={placeholder}
             readOnly={readOnly}
+            disabled={disabled}
         />
     )
 }

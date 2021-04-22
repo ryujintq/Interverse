@@ -1,9 +1,8 @@
 .tab-list-item {
-  display: inline-block;
   list-style: none;
   margin-bottom: -1px;
   padding: 10px 0;
-  width: 50%;
+  flex: 1;
   text-align: center;
   cursor: pointer;
   border: solid lightgray;
@@ -12,4 +11,8 @@
 
 .tab-list-active {
   border-bottom: 2px solid var(--primary);
+}
+
+.close-icon {
+  flex: 0.5
 }

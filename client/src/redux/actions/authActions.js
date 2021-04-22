@@ -1,4 +1,4 @@
-import { AUTH_FAIL, AUTH_REQUEST, AUTH_SUCCESS, AUTH_CLEAR_ERROR, AUTH_SIGNOUT } from '../constants/authConstants'
+import { AUTH_FAIL, AUTH_REQUEST, AUTH_LOGIN, AUTH_CLEAR_ERROR, AUTH_SIGNOUT, AUTH_SIGNUP } from '../constants/authConstants'
 import api from '../../api/chatApp'
 import { localStorageSet, localStorageRemove } from '../../util/localStorage'
 
@@ -6,14 +6,9 @@ export const signup = (incomingUsername, email, password, language) => async dis
     try {
         dispatch({ type: AUTH_REQUEST })
 
-        const { data } = await api.post('/users/signup', { incomingUsername, email, password, language })
-        const { data: { token, username, id } } = data
+        await api.post('/users/signup', { incomingUsername, email, password, language })
 
-        localStorageSet('token', token)
-        localStorageSet('username', username)
-        localStorageSet('id', id)
-
-        dispatch({ type: AUTH_SUCCESS, payload: { token, username, id } })
+        dispatch({ type: AUTH_SIGNUP })
     } catch (error) {
         dispatch({ type: AUTH_FAIL, payload: error.response.data.message })
     }
@@ -30,7 +25,7 @@ export const login = (email, password) => async dispatch => {
         localStorageSet('username', username)
         localStorageSet('id', id)
 
-        dispatch({ type: AUTH_SUCCESS, payload: { token, username, id } })
+        dispatch({ type: AUTH_LOGIN, payload: { token, username, id } })
     } catch (error) {
         dispatch({ type: AUTH_FAIL, payload: error.response.data.message })
     }

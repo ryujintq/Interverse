@@ -5,7 +5,7 @@ import Input from '../../components/Input/Input'
 import ModalOverlay from '../../components/ModalOverlay/ModalOverlay'
 import { addToSentRequests, addToFriendRequests, acceptFriendRequest, denyFriendRequest, friendRequestDenied, friendRequestAccepted, friendsClearError, friendsFail, removeFriend } from '../../redux/actions/friendsActions'
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
-import { chatsClearError, createChat, setChatError, setCurrentChat, receivedMessage } from '../../redux/actions/chatActions'
+import { chatsClearError, createChat, setChatError, setCurrentChat, receivedMessage, leftChat, addedToChat, hidePanel } from '../../redux/actions/chatActions'
 import { useSocket } from '../../api/SocketProvider'
 import './LeftPanel.css'
 
@@ -16,6 +16,7 @@ const LeftPanel = () => {
     const [newConversationName, setNewConversationName] = useState('')
     const [checkedFriends, setCheckedFriends] = useState([])
 
+    const dispatch = useDispatch()
     const socket = useSocket()
 
     const auth = useSelector(state => state.auth)
@@ -25,9 +26,7 @@ const LeftPanel = () => {
     const { friendsList, friendRequests, sentRequests, errorMessage: friendsError } = friends
 
     const chatsState = useSelector(state => state.chats)
-    const { chats, currentChatId, errorMessage: chatsError } = chatsState
-
-    const dispatch = useDispatch()
+    const { chats, currentChatId, errorMessage: chatsError, panelClassName } = chatsState
 
     useEffect(() => {
         if (socket == null) return
@@ -38,6 +37,10 @@ const LeftPanel = () => {
         })
 
         socket.on('receive-message', data => dispatch(receivedMessage(data)))
+
+        socket.on('added-to-chat', data => dispatch(addedToChat(data)))
+
+        socket.on('left-chat', data => dispatch(leftChat(data)))
 
         socket.on('friend-request-received', data => dispatch(addToFriendRequests(data)))
 
@@ -52,15 +55,19 @@ const LeftPanel = () => {
 
     const confirmButtonFunction = () => {
         if (isConversationsOpen) {
-            if (!checkedFriends.length || newConversationName === '') {
-                dispatch(setChatError('Please enter a name and choose a friend'))
-            } else {
-                dispatch(createChat(newConversationName, checkedFriends))
-                closeModal()
+            if (checkedFriends.length == 0) {
+                dispatch(setChatError('Please choose at least one friend'))
+                return
             }
-        } else {
-            socket.emit('add-friend', { friendName: addContactName })
+            if (checkedFriends.length > 1 && newConversationName == '') {
+                dispatch(setChatError('Please choose at least two friends and a name'))
+                return
+            }
+
+            dispatch(createChat(newConversationName, checkedFriends, closeModal))
+            return
         }
+        socket.emit('add-friend', { friendName: addContactName })
     }
 
     const closeModal = () => {
@@ -69,7 +76,6 @@ const LeftPanel = () => {
         dispatch(friendsClearError())
         dispatch(chatsClearError())
     }
-
 
     const modalButtons = (
         <div className="modal-btns">
@@ -94,15 +100,17 @@ const LeftPanel = () => {
         setCheckedFriends([])
     }
 
-
     const conversationModalContent = (
         <div className="modal-container">
             <h2>Start New Conversation</h2>
             {chatsError && <ErrorMessage text={chatsError} />}
-            <Input
+            <input
+                className={`input ${checkedFriends.length < 2 ? 'group-input-disabled' : ''}`}
+                type='text'
                 value={newConversationName}
                 onChange={e => setNewConversationName(e.target.value)}
-                placeholder='New conversation name'
+                placeholder={'New conversation name'}
+                disabled={checkedFriends.length < 1}
             />
             <div className="modal-list-container">
                 {friendsList.map(friend => (
@@ -157,9 +165,11 @@ const LeftPanel = () => {
 
     const handleChatSelection = chatId => {
         if (chatId == currentChatId) {
+            closeTabs()
             return
         }
         dispatch(setCurrentChat(chatId))
+        closeTabs()
     }
 
     const handleRemoveFriend = friend => {
@@ -167,9 +177,18 @@ const LeftPanel = () => {
         dispatch(removeFriend(friend))
     }
 
+    const closeTabs = () => {
+        dispatch(hidePanel())
+    }
+
+    const handleCloseTabs = () => {
+        if (!currentChatId) return
+        closeTabs()
+    }
+
     return (
-        <div className='left-panel'>
-            <Tabs onTabChange={() => setIsConversationsOpen(!isConversationsOpen)}>
+        <div className={panelClassName || 'left-panel'}>
+            <Tabs onTabChange={() => setIsConversationsOpen(!isConversationsOpen)} onCloseTabs={handleCloseTabs}>
                 <div label='Conversations'>
                     <div className="conversations">
                         {chats.length > 0 && chats.map(chat => (
@@ -178,7 +197,7 @@ const LeftPanel = () => {
                                 className={`conversation-name ${currentChatId == chat._id ? 'selected-chat' : ''}`}
                                 onClick={() => handleChatSelection(chat._id)}
                             >
-                                {chat.name} {chat.newMessages ? <span className='new-messsage'>new!</span> : ''}
+                                {chat.name} {chat.noOfUnreads > 0 ? <span className='new-messsage'>{chat.noOfUnreads}</span> : ''}
                             </p>
                         ))}
                     </div>

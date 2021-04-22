@@ -2,7 +2,8 @@ import axios from 'axios'
 import { localStorageGet } from '../util/localStorage'
 
 const instance = axios.create({
-    baseURL: 'http://192.168.56.1:3001/api/v1'
+    // baseURL: 'http://192.168.100.11:3001/api/v1'
+    baseURL: 'https://interverse-lcsrujzezq-lz.a.run.app/api/v1'
 })
 
 instance.interceptors.request.use(

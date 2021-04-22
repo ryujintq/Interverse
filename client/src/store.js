@@ -15,7 +15,8 @@ const initialState = {
     auth: {
         token: localStorageGet('token'),
         username: localStorageGet('username'),
-        id: localStorageGet('id')
+        id: localStorageGet('id'),
+        signedUp: false
     },
     friends: {
         friendsList: [],
@@ -28,6 +29,7 @@ const initialState = {
         currentChatId: '',
         currentChatName: '',
         currentChatUsers: [],
+        panelClassName: 'left-panel',
         loading: false
     }
 }

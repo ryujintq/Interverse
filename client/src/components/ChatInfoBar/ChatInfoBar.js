@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../../api/SocketProvider'
-import { leaveChat } from '../../redux/actions/chatActions'
+import { leaveChat, showPanel } from '../../redux/actions/chatActions'
+import { useMediaQuery } from '../../util/useMediaQuery'
 import ModalOverlay from '../ModalOverlay/ModalOverlay'
 import './ChatInfoBar.css'
 
@@ -26,26 +27,23 @@ const ChatInfoBar = () => {
         setDisplayMenu(!displayMenu)
     }
 
-    const handleAddUserToChat = () => {
+    const handleAddToChatModal = () => {
         setModalName('ADD')
         setShowModal(true)
         setDisplayMenu(false)
     }
 
-    const confirmButtonFunction = () => {
-        if (modalName == 'ADD') {
-
-        } else if (modalButtons == 'PARTICIPANTS') {
-
-        }
+    const handleAddToChat = () => {
+        socket.emit('add-to-chat', { chatId: currentChatId, users: checkedUsers })
+        setShowModal(false)
+        setCheckedUsers([])
     }
-
 
     const modalButtons = (
         <div className="modal-btns">
             <div
                 className="modal-confirm-btn modal-btn"
-                onClick={confirmButtonFunction}
+                onClick={handleAddToChat}
             >
                 Confirm
             </div>
@@ -76,10 +74,10 @@ const ChatInfoBar = () => {
                 <h2>Add User To Chat</h2>
                 <div className="modal-list-container">
                     {filteredFriends.map(user => (
-                        <div key={user._id} className="modal-list-element" onClick={() => handleCheckBoxClick(user)}>
+                        <div key={user.userId} className="modal-list-element" onClick={() => handleCheckBoxClick(user)}>
                             <input
                                 type="checkbox"
-                                checked={checkedUsers.includes(user._id)}
+                                checked={isUserChecked(user)}
                                 readOnly
                             />
                             <p>{user.username}</p>
@@ -105,14 +103,23 @@ const ChatInfoBar = () => {
         </div>
     )
 
+    const isUserChecked = user => {
+        for (let i = 0, iEnd = checkedUsers.length; i < iEnd; i++) {
+            if (checkedUsers[i].userId == user.userId) {
+                return true
+            }
+        }
+        return false
+    }
+
     const handleCheckBoxClick = user => {
         setCheckedUsers(prevCheckedUsers => {
-            if (checkedUsers.includes(user._id)) {
-                return prevCheckedUsers.filter(userId => {
-                    return userId !== user._id
+            if (isUserChecked(user)) {
+                return prevCheckedUsers.filter(prevUser => {
+                    return prevUser.userId !== user.userId
                 })
             } else {
-                return [...prevCheckedUsers, user._id]
+                return [...prevCheckedUsers, user]
             }
         })
     }
@@ -129,8 +136,15 @@ const ChatInfoBar = () => {
         setDisplayMenu(false)
     }
 
+    const isSmallScreen = useMediaQuery()
+
+    const showTabs = () => {
+        dispatch(showPanel())
+    }
+
     return (
         <div className='info-bar'>
+            {isSmallScreen && <i className="fas fa-comments fa-2x" onClick={showTabs}></i>}
             <h3>{currentChatName}</h3>
             <div className="menu">
                 <div className='menu-icon' onClick={handleMenuClick}>
@@ -141,7 +155,7 @@ const ChatInfoBar = () => {
                 <div className={`menu-items ${displayMenu && 'active'}`}>
                     <ul>
                         <li onClick={handleParticipantsClick}>Participants</li>
-                        <li onClick={handleAddUserToChat}>Add Participant</li>
+                        <li onClick={handleAddToChatModal}>Add Participant</li>
                         <li onClick={handleLeaveChat}>Leave chat</li>
                     </ul>
                 </div>

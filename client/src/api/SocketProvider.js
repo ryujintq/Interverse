@@ -11,7 +11,8 @@ export const SocketProvider = ({ id, children }) => {
     const [socket, setSocket] = useState()
 
     useEffect(() => {
-        const newSocket = socketIOClient("http://127.0.0.1:3001", { query: { id } })
+        // const newSocket = socketIOClient("http://192.168.100.11:3001", { query: { id } })
+        const newSocket = socketIOClient("https://interverse-lcsrujzezq-lz.a.run.app", { query: { id } })
 
         setSocket(newSocket)
 

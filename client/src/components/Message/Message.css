@@ -54,3 +54,7 @@
     margin-left: auto;
     margin-right: 0;
 }
+
+.system-message {
+    margin: 10px auto;
+}
