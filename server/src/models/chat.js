@@ -1,15 +1,24 @@
 import mongoose from 'mongoose'
 
 const chatSchema = new mongoose.Schema({
-    users: [
+    usersInfo: [
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
+            user: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'User'
+            },
+            noOfUnreads: {
+                type: Number,
+                default: 0
+            },
+            name: String,
+            _id: false
         }
     ],
     name: String,
     languages: [String],
-    lastUpdated: Date
+    lastUpdated: Date,
+    isMultiLanguage: Boolean
 })
 
 export default mongoose.model('Chat', chatSchema)
