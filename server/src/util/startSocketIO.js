@@ -60,15 +60,12 @@ const startSocketIO = io => {
                 const translatedMessages = await translate(chat.languages, messages, user.language)
 
                 const timestamp = new Date()
-
-                const compareResult = translatedMessages.localeCompare(messages);
-
                 //create the message and save to database
                 let newMessage = new Message({
                     chat,
                     sender,
                     messages: translatedMessages,
-                    originalMessage: compareResult !== 0 ? messages : '',
+                    originalMessage: chat.languages.length > 1 ? messages : '',
                     timestamp
                 })
 

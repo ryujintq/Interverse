@@ -34,4 +34,6 @@ app.use('/api/v1/friends', friendRoutes)
 
 //set app to listen on port
 const port = process.env.PORT
+// const port = 3001
+
 server.listen(port, console.log('Server now listening now port', port))

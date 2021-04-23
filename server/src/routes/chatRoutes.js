@@ -105,8 +105,12 @@ router.post('/', requireAuth, async (req, res) => {
         const userToAdd = await User.findById(userIds[0]).lean()
 
         const usersInfo = [{ user, name: userToAdd.username }, { user: userToAdd, name: user.username }]
-        const languages = [user.language, userToAdd.language]
         const chatUsers = [{ _id: user._id, username: user.username }, { _id: userToAdd._id, username: userToAdd.username }]
+        const languages = [user.language]
+
+        if (!languages.includes(userToAdd.language)) {
+            languages.push(userToAdd.language)
+        }
 
         const chat = new Chat({
             usersInfo,

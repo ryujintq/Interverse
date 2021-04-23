@@ -23,6 +23,7 @@ export const setCurrentChat = chatId => async dispatch => {
     try {
         dispatch({ type: CHATS_SELECTION, payload: chatId })
         const { data: { data: { messages, chat } } } = await api.get(`/chats/${chatId}`)
+        console.log(messages)
         dispatch({ type: CHATS_SET_CHAT, payload: { messages, chat } })
     } catch (error) {
         console.log(error)

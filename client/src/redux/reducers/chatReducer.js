@@ -59,6 +59,8 @@ export const chatReducer = (state = { chats: [], currentChat: [], currentChatId:
             return { ...state, chats: [...newChatsList], currentChat: [], currentChatId: '', currentChatName: '', currentChatUsers: [] }
         case CHATS_LEFT:
             const { id, message } = payload
+            //if incoming message belongs to opened chat, add message to array
+            // else increment unreads and move chat to top
             if (message.chat._id.toString() == state.currentChatId.toString()) {
                 const newUsersArray = state.currentChatUsers.filter(user => user._id !== id)
                 return { ...state, currentChat: [...state.currentChat, message], currentChatUsers: [...newUsersArray] }
@@ -72,6 +74,8 @@ export const chatReducer = (state = { chats: [], currentChat: [], currentChatId:
             }
         case CHATS_ADDED:
             const { users, message: usersAddedMessage } = payload
+            //if incoming message belongs to opened chat, add message to array
+            // else increment unreads and move chat to top
             if (usersAddedMessage.chat._id.toString() == state.currentChatId.toString()) {
                 const newUsersArray = [...state.currentChatUsers, ...users]
                 return { ...state, currentChat: [...state.currentChat, usersAddedMessage], currentChatUsers: [...newUsersArray] }

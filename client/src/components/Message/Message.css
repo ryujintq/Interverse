@@ -29,13 +29,21 @@
 
 .message-username.owner {
     margin-left: auto;
-    
 }
 
-.message-username span {
+.message-username span,
+.message small {
     color: rgba(0, 0, 0, 0.7);
     font-size: 11px;
-    align-self: flex-end;
+}
+
+.message small {
+    cursor: pointer;
+    display: none;
+}
+
+.message:hover > .try {
+    display: block;
 }
 
 .message-body {
