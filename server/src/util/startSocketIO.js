@@ -60,6 +60,7 @@ const startSocketIO = io => {
                 const translatedMessages = await translate(chat.languages, messages, user.language)
 
                 const timestamp = new Date()
+
                 //create the message and save to database
                 let newMessage = new Message({
                     chat,
